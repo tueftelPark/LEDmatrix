@@ -7,15 +7,10 @@
 //    FRAME = Nummer des Frames (0 = erstes, 1 = zweites, …)
 //    ZEIT_MS = Dauer der Anzeige eines Frames
 //
-// matrix.stopDisplay();
-//  → Stoppt die aktuelle Anzeige (bei manchen Versionen instabil)
-//    Besser: Ein „leeres“ Frame anzeigen.
-//
 // delay(ZEIT_MS);  → Pause zwischen zwei Aktionen
 // for (int i = 0; i < ANZAHL; i++) { … } → Wiederholt Befehle (z. B. für Animationen)
 //
 // ======================================================
-
 
 #include "grove_two_rgb_led_matrix.h"
 #include <avr/pgmspace.h> // Für PROGMEM (große Arrays im Flash speichern)
@@ -35,17 +30,16 @@ uint64_t clearFrame[8];
 // BILD-DATEN -> hier kommt dein Bild als Zahlen und Buchstaben rein
 // ==================================================================
 // TODO: Füge hier dein Bild als Code aus dem Online Editor ein
-const uint64_t example[] PROGMEM = {
+uint64_t smile[] = {
 
-  0xffff1d000000ffff,
-  0xff0000000000ffff,
-  0xff80d38010d310ff,
-  0xffd31010d3d310ff,
-  0xffffd3d3d312ffff,
-  0xffff29982c0101ff,
-  0xff1898989807ff18,
-  0xffff12ffff12ffff,
- 
+  0x8383838383838383,
+  0x8383cb8383cb8383,
+  0x8383838383838383,
+  0x8383838383838383,
+  0x83cb83838383cb83,
+  0x8383cb8383cb8383,
+  0x838383cbcb838383,
+  0x8383838383838383
 };
 
 // ======================================================
@@ -69,56 +63,9 @@ void setup() {
 // ======================================================
 void loop() {
   // --- Display leeren ---
-  for (int i = 0; i < 8; i++) clearFrame[i] = 0xffffffffffffffff;
   matrix.displayFrames(clearFrame, 100, false, 1);
 
   // --- Bild anzeigen ---
-  uint64_t buffer[8];
-  //TODO: Passe hier die Anzahl Frames an gemäss deiner Animation
-  const int frameCount = 22; 
-
-  for (int frame = 0; frame < frameCount; frame++) {
-    for (int row = 0; row < 8; row++) {
-      buffer[row] = read_qword_from_progmem(&example[frame * 8 + row]);
-    }
-    matrix.displayFrames(buffer, 600, false, 1); // 600 = Zeit pro Frame (langsamer/schneller)
-    delay(600);
-  }
-
-  // --- Zweiter Text ---
-  matrix.displayString("GOAL 1:0!!", 2500, true, 0x03);
-  delay(2500);
-
-  // ======================================================
-  // ✍️ HIER EIGENE BEFEHLE EINFÜGEN (KOPIEREN AUS OBEN)
-  // ======================================================
-  //
-  // Beispiele:
-  //
-  // matrix.displayString("LEVEL UP!", 3000, true, 0x05);
-  // delay(1000);
-  //
-  // matrix.displayFrames(example + 1*8, 800, false, 1);
-  // delay(500);
-  //
-  // matrix.displayString("GAME OVER", 4000, true, 0x04);
-  // delay(2000);
-  //
-  // → Text ändern: erster Parameter ("TEXT")
-  // → Anzeigedauer ändern: zweiter Parameter (z. B. 3000 = 3 Sekunden)
-  // → Farbe ändern: letzter Parameter (z. B. 0x05 = Magenta)
-  //
-  // ======================================================
-  // 💡 BEISPIELE ZUM KOPIEREN (unten in den Loop einfügen)
-  //
-  // matrix.displayString("Hallo!", 120, true, 0x03); // gelber Text, mittlere Geschwindigkeit
-  // delay(3000); // warten, bis Text ganz sichtbar war
-  //
-  // matrix.displayString("GO!", 80, true, 0x04); // blauer, schneller Text
-  // delay(2000);
-  //
-  // matrix.displayFrames(example + 0*8, 500, false, 1); // Frame 0 0.5 s anzeigen
-  // delay(500);
-  // ======================================================
-
+    matrix.displayFrames(smile, 10000, false, 1); // 600 = Zeit pro Frame (langsamer/schneller)
+    delay(10000);
 }
