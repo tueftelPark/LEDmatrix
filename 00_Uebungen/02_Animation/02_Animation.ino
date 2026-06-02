@@ -277,8 +277,8 @@ void loop() {
 
   // --- Textanzeige ---
   // (Text, Zeit in ms, warten, Farbe)
-  matrix.displayString("Let's goo!!", 2500, true, 0x03);
-  delay(2700);
+  //matrix.displayString("Let's goo!!", 2500, true, 0x03);
+  //delay(2700);
 
   // --- Display leeren ---
     for (int i = 0; i < 8; i++) clearFrame[i] = 0xffffffffffffffff;
@@ -299,8 +299,8 @@ void loop() {
   }
 
   // --- Zweiter Text ---
-  matrix.displayString("GOAL 1:0!!", 2500, true, 0x03);
-  delay(2500);
+  //matrix.displayString("GOAL 1:0!!", 2500, true, 0x03);
+  //delay(2500);
 
   // ======================================================
   // ✍️ HIER EIGENE BEFEHLE EINFÜGEN (KOPIEREN AUS OBEN)
