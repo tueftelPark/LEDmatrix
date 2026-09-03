@@ -42,9 +42,10 @@ uint64_t clearFrame[8];
 // ==============================================================
 
 int anzahl_bilder = 2;
+int bildrate = 600; //in ms
 const uint64_t example[] PROGMEM = {
-
- //Hier Frames einfügen!
+//-----------------------------------
+//Hier Frames einfügen!
   
 
 
@@ -52,6 +53,8 @@ const uint64_t example[] PROGMEM = {
 
 
 
+
+//-----------------------------------
 };
 
 // ===========================================================
@@ -106,8 +109,8 @@ void loop() {
       buffer[row] = read_qword_from_progmem(&example[frame * 8 + row]);
     }
 //AUFGABE: Test - passe die Zahlen in den nächsten zwei Zeilen an und schaue was passiert 
-    matrix.displayFrames(buffer, 600, false, 1); // Zahl nach buffer verändern
-    delay(600);
+    matrix.displayFrames(buffer, bildrate, false, 1); // Zahl nach buffer verändern
+    delay(bildrate);
   }
 
   // --- Zweiter Text ---
