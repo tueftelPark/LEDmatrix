@@ -44,8 +44,8 @@ uint64_t clearFrame[8];
 int anzahl_bilder = 2;
 int bildrate = 600; //in ms
 const uint64_t example[] PROGMEM = {
-//-----------------------------------
-//Hier Frames einfügen!
+//-----unter dieser Linie Frames einfügen------------------------------
+
   
 
 
