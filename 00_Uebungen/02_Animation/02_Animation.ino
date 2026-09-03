@@ -40,205 +40,17 @@ uint64_t clearFrame[8];
 // ==============================================================
 //  ANIMATIONS-DATEN -> hier dein Code vom Online Editor einfügen
 // ==============================================================
+
+int anzahl_bilder = 2;
 const uint64_t example[] PROGMEM = {
 
-  0xffff1d000000ffff,
-  0xff0000000000ffff,
-  0xff80d38010d310ff,
-  0xffd31010d3d310ff,
-  0xffffd3d3d312ffff,
-  0xffff29982c0101ff,
-  0xff1898989807ff18,
-  0xffff12ffff12ffff,
- 
-  0xff1d000000ffffff,
-  0x0000000000ffffff,
-  0x80d38010d310ffff,
-  0xd31010d3d310ffff,
-  0xffd3d3d312ffffff,
-  0xff29982c0101ffff,
-  0x1898989807ff18ff,
-  0xffff1affff1affff,
- 
-  0x1d000000ffffffff,
-  0x00000000ffffffff,
-  0xd38010d310ffffff,
-  0x1010d3d310ffffff,
-  0xd3d3d312ffffffff,
-  0x29982c0101ffffff,
-  0x98989807ff18ffff,
-  0x12ffff12ffffffff,
- 
-  0x000000ffffffffff,
-  0x000000ffffffffff,
-  0x8010d310ffffffff,
-  0x10d3d310ffffffff,
-  0xd3d312ffffffffff,
-  0x982c0101ffffffff,
-  0x989807ff18ffffff,
-  0x1affff1affffffff,
- 
-  0x0000ffffffffffff,
-  0x0000ffffffffffff,
-  0x10d310ffffffffff,
-  0xd3d310ffffffffff,
-  0xd312ffffffffffff,
-  0x2c0101ffffffffff,
-  0x9807ff18ffffffff,
-  0xff12ffffffffffff,
- 
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
-  0x2c2c2c2c2c2c2c2c,
- 
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
-  0x4848484848484848,
- 
-  0xffffffffffffff27,
-  0xffffffffffff8227,
-  0xffffffffffffff27,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
- 
-  0xffffffffffffff27,
-  0xffffffffff82ff27,
-  0xffffffffffffff27,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
- 
-  0xffffffffffffff27,
-  0xffffffff82ffff27,
-  0xffffffffffffff27,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
- 
-  0xffffffffffffff27,
-  0xffffffff82ffff27,
-  0xffffffffffffff27,
-  0xffffffffffffffff,
-  0x52ffffffffffffff,
-  0x55ffffffffffffff,
-  0x55ffffffffffffff,
-  0xffffffffffffffff,
- 
-  0xffffffffffffff27,
-  0xffffff7affffff27,
-  0xffffffffffffff27,
-  0x52ffffffffffffff,
-  0x52ffffffffffffff,
-  0x55ffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0xffffffffffffff27,
-  0xffff7affffffff27,
-  0x4fffffffffffff27,
-  0x52ffffffffffffff,
-  0x52ffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffff27,
-  0x507fffffffffff27,
-  0x4fffffffffffff27,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffff27,
-  0x4fff7fffffffff27,
-  0xffffffffffffff2b,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffffff,
-  0x4fffffffffffff27,
-  0xffffff7fffffff2b,
-  0xffffffffffffff2c,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffffff,
-  0x4fffffffffffff27,
-  0xffffffffffffff2b,
-  0xffffffff7bffff2c,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffffff,
-  0x4fffffffffffff27,
-  0xffffffffffffff2b,
-  0xffffffffffffff2c,
-  0xffffffffff7bffff,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffffff,
-  0x4fffffffffffff27,
-  0xffffffffffffff2b,
-  0xffffffffffffff2c,
-  0xffffffffffffffff,
-  0xffffffffffff7bff,
-  0xffffffffffffffff,
- 
-  0x50ffffffffffffff,
-  0x50ffffffffffffff,
-  0x4fffffffffffff27,
-  0xffffffffffffff2b,
-  0xffffffffffffff2c,
-  0xffffffffffffffff,
-  0xffffffffffffffff,
-  0xffffffffffffff7b,
- 
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
-  0x0202020202020202,
- 
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d,
-  0x4d4d4d4d4d4d4d4d
+ //Hier Frames einfügen!
+  
+
+
+
+
+
 
 };
 
@@ -287,7 +99,7 @@ void loop() {
   // --- Animation abspielen ---
   uint64_t buffer[8];
   //AUFGABE: Passe hier die Anzahl Frames an gemäss deiner Animation
-  const int frameCount = 22; 
+  const int frameCount = anzahl_bilder; 
 
   for (int frame = 0; frame < frameCount; frame++) {
     for (int row = 0; row < 8; row++) {
