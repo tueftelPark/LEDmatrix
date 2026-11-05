@@ -113,7 +113,8 @@ button {
     fill: currentColor;
 }
 
-#save-code-button {
+#save-code-button,
+#open-code-button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -128,9 +129,40 @@ button {
     transition: background .15s ease, transform .1s ease;
 }
 
-#save-code-button:hover {
+#save-code-button:hover,
+#open-code-button:hover {
     background: var(--tp-orange-dark);
     transform: translateY(-1px);
+}
+
+#frames.drop-target {
+    outline: 3px dashed var(--tp-orange);
+    outline-offset: -3px;
+}
+
+#import-toast {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tp-navy);
+    color: #fff;
+    font-size: 13px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    z-index: 1001;
+    opacity: 1;
+    transition: opacity .6s ease;
+    max-width: calc(100vw - 32px);
+}
+
+#import-toast.error {
+    background: #b3261e;
+}
+
+#import-toast.fade-out {
+    opacity: 0;
 }
 
 .navbar-colorbar {

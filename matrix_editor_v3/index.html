@@ -32,6 +32,12 @@
         Code speichern
     </button>
 
+    <button id="open-code-button" type="button" title="Gespeicherten Code (.h, .txt, .ino) öffnen – die Datei kann auch auf die Bilderleiste gezogen werden">
+        <svg class="icon" viewBox="0 0 16 16" style="width:18px;height:18px;"><path d="M1 3h5l2 2h7v9H1V3zm7 3L5 9h2v3h2V9h2L8 6z"/></svg>
+        Datei öffnen
+    </button>
+    <input id="open-code-input" type="file" accept=".h,.txt,.ino,.c,.cpp,text/plain" style="display:none;">
+
     <div id="movie-slots" style="display:flex; align-items:center; gap:6px;" title="Leeren Platz anklicken = aktuelle Animation speichern. Belegten Platz anklicken = Film laden. Rechtsklick = Platz löschen.">
         <span class="navbar-text" style="white-space:nowrap;">Meine Filme</span>
         <span id="movie-slot-1" class="movie-slot" data-slot="0">1</span>
