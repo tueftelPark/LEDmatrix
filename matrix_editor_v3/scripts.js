@@ -135,6 +135,67 @@
                     patterns[i] = converter.fixPattern(patterns[i]);
                 }
                 return patterns;
+            },
+            // Liest gespeicherten oder in einen Sketch eingefügten Code wieder ein.
+            // Bewusst tolerant: Kommentare, Array-Name, PROGMEM, Zahlenformat
+            // (uint64 = 1 Zahl pro Zeile, uint8 = 1 Zahl pro LED) sind egal.
+            codeToPatterns: function (text) {
+                text = String(text || '');
+
+                // Bildrate aus "// Bildrate: 500 ms" oder "int bildrate = 600;"
+                var delay = null;
+                var delayMatch = text.match(/bildrate\s*[:=]\s*(\d+)/i);
+                if (delayMatch) delay = parseInt(delayMatch[1], 10);
+
+                // Kommentare entfernen (z. B. "0x01 = Rot" im Kopf der Übungs-Sketches)
+                var code = text
+                    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+                    .replace(/\/\/[^\n]*/g, ' ');
+
+                // Erstes Array "name[...] = { ... }", das Hex-Zahlen enthält.
+                // Ohne Array-Klammern (z. B. "Animation kopieren") zählt der ganze Text.
+                var body = code;
+                var arrayRe = /\[[^\]]*\]\s*(?:PROGMEM\s*)?=\s*\{([^}]*)\}/g;
+                var m;
+                while ((m = arrayRe.exec(code)) !== null) {
+                    if (/0x[0-9a-f]/i.test(m[1])) {
+                        body = m[1];
+                        break;
+                    }
+                }
+
+                var numbers = [];
+                var numRe = /0x([0-9a-f]+)/gi;
+                while ((m = numRe.exec(body)) !== null) {
+                    numbers.push(m[1].toLowerCase());
+                }
+                if (!numbers.length) {
+                    return { patterns: [], format: null, delay: delay, padded: false };
+                }
+
+                var isUint64 = numbers.some(function (n) { return n.length > 2; });
+                var width = isUint64 ? 16 : 2;
+                var hex = numbers.map(function (n) {
+                    n = ('0000000000000000' + n).slice(-width);
+                    return n;
+                }).join('');
+
+                var patterns = [];
+                var padded = false;
+                for (var i = 0; i < hex.length; i += 128) {
+                    var p = hex.substr(i, 128);
+                    if (p.length < 128) {
+                        p = p + 'f'.repeat(128 - p.length);
+                        padded = true;
+                    }
+                    patterns.push(p);
+                }
+                return {
+                    patterns: patterns,
+                    format: isUint64 ? 'uint64' : 'uint8',
+                    delay: delay,
+                    padded: padded
+                };
             }
         };
 
@@ -713,6 +774,8 @@
             var code = byteMode
                 ? converter.patternsToCodeUint8Array(patterns)
                 : converter.patternsToCodeUint64Array(patterns);
+            var delayMs = parseInt(document.getElementById('play-delay-input').value, 10) || 500;
+            code = '// Bildrate: ' + delayMs + ' ms\n' + code;
             var blob = new Blob([code], { type: 'text/plain' });
             var url = URL.createObjectURL(blob);
             var $a = document.createElement('a');
@@ -722,6 +785,97 @@
             $a.click();
             document.body.removeChild($a);
             setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        });
+
+        // ---------- Datei öffnen (Import gespeicherter Animationen) ----------
+        var $openInput = document.getElementById('open-code-input');
+
+        function showImportToast(message, isError) {
+            var $old = document.getElementById('import-toast');
+            if ($old) $old.remove();
+            var $toast = document.createElement('div');
+            $toast.id = 'import-toast';
+            if (isError) $toast.classList.add('error');
+            $toast.textContent = message;
+            document.body.appendChild($toast);
+            setTimeout(function () {
+                $toast.classList.add('fade-out');
+                setTimeout(function () { $toast.remove(); }, 600);
+            }, isError ? 7000 : 4000);
+        }
+
+        function importCode(text, fileName) {
+            var result = converter.codeToPatterns(text);
+            if (!result.patterns.length) {
+                showImportToast('In „' + fileName + '“ wurden keine Bilder gefunden.', true);
+                return;
+            }
+            if (framesToPatterns().length &&
+                !window.confirm('Die aktuelle Animation wird durch „' + fileName + '“ ersetzt. Fortfahren?')) {
+                return;
+            }
+
+            $byteArraysCheckbox.checked = (result.format === 'uint8');
+            if (result.delay) {
+                document.getElementById('play-delay-input').value = Math.max(100, result.delay);
+            }
+            rebuildFramesFromPatterns(result.patterns);
+
+            var n = result.patterns.length;
+            var msg = '✓ ' + n + (n === 1 ? ' Bild' : ' Bilder') + ' aus „' + fileName + '“ geladen';
+            if (result.padded) {
+                msg += ' – das letzte Bild war unvollständig und wurde mit dunklen LEDs aufgefüllt';
+            }
+            showImportToast(msg, false);
+        }
+
+        function importFile(file) {
+            if (!file) return;
+            if (file.size > 1024 * 1024) {
+                showImportToast('Die Datei „' + file.name + '“ ist zu gross.', true);
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function () {
+                importCode(reader.result, file.name);
+            };
+            reader.onerror = function () {
+                showImportToast('Die Datei „' + file.name + '“ konnte nicht gelesen werden.', true);
+            };
+            reader.readAsText(file);
+        }
+
+        document.getElementById('open-code-button').addEventListener('click', function () {
+            $openInput.click();
+        });
+
+        $openInput.addEventListener('change', function () {
+            importFile(this.files && this.files[0]);
+            this.value = ''; // gleiche Datei nochmals wählbar
+        });
+
+        // Datei irgendwo auf die Seite ziehen (Bilderleiste wird hervorgehoben)
+        function isFileDrag(e) {
+            return e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], 'Files') !== -1;
+        }
+
+        document.addEventListener('dragover', function (e) {
+            if (!isFileDrag(e)) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            $frames.classList.add('drop-target');
+        });
+
+        document.addEventListener('dragleave', function (e) {
+            if (!isFileDrag(e)) return;
+            if (!e.relatedTarget) $frames.classList.remove('drop-target');
+        });
+
+        document.addEventListener('drop', function (e) {
+            if (!isFileDrag(e)) return;
+            e.preventDefault();
+            $frames.classList.remove('drop-target');
+            importFile(e.dataTransfer.files && e.dataTransfer.files[0]);
         });
 
         // ---------- Matrix-Toggle (alles an/aus) ----------
